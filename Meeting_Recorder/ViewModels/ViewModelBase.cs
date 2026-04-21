@@ -1,9 +1,10 @@
+using Meeting_Recorder.Interface;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Meeting_Recorder.ViewModels
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged, IViewModel
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

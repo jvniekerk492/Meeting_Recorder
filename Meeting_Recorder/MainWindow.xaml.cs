@@ -1,23 +1,27 @@
 ﻿using System.Windows;
 using AudioManager;
+using Meeting_Recorder.Interface;
 using Meeting_Recorder.ViewModels;
+using Meeting_Recorder.Views;
 
 namespace Meeting_Recorder
 {
-    public partial class MainWindow : Window
+    public sealed partial class MainWindow : Window
     {
-        private readonly RecorderViewModel viewModel;
+        private readonly RecorderViewModel recorderViewModel;
+        private readonly IView recorderView;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.viewModel = new RecorderViewModel(new AudioRecorder());
-            DataContext = this.viewModel;
+            this.recorderViewModel = new RecorderViewModel(new AudioRecorder());
+            this.recorderView = ViewFactory.Instance.CreateView(ViewType.Recorder, this.recorderViewModel);
+            this.Content = this.recorderView.View;
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            this.viewModel.Dispose();
+            this.recorderViewModel.Dispose();
             base.OnClosed(e);
         }
     }
