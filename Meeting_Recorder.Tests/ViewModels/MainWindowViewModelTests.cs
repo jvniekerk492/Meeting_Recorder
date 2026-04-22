@@ -7,15 +7,15 @@ namespace Meeting_Recorder.Tests.ViewModels
 {
     public sealed class MainWindowViewModelTests
     {
-        [Fact]
+        [StaFact]
         public void Constructor_Sets_Default_View_To_Recorder()
         {
             var viewModel = CreateViewModel();
 
-            Assert.Equal("Recorder", viewModel.CurrentView.View.Name);
+            Assert.IsType<Recorder>(viewModel.CurrentView);
         }
 
-        [Fact]
+        [StaFact]
         public void Constructor_Sets_Menu_Closed()
         {
             var viewModel = CreateViewModel();
@@ -23,7 +23,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.False(viewModel.IsMenuOpen);
         }
 
-        [Fact]
+        [StaFact]
         public void ToggleMenuCommand_Opens_Menu_When_Closed()
         {
             var viewModel = CreateViewModel();
@@ -33,7 +33,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.True(viewModel.IsMenuOpen);
         }
 
-        [Fact]
+        [StaFact]
         public void ToggleMenuCommand_Closes_Menu_When_Open()
         {
             var viewModel = CreateViewModel();
@@ -44,28 +44,28 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.False(viewModel.IsMenuOpen);
         }
 
-        [Fact]
+        [StaFact]
         public void NavigateCommand_Changes_Current_View_To_BasicSettings()
         {
             var viewModel = CreateViewModel();
 
             viewModel.NavigateCommand.Execute(ViewType.BasicSettings);
 
-            Assert.Equal("BasicSettings", viewModel.CurrentView.View.Name);
+            Assert.IsType<BasicSettings>(viewModel.CurrentView);
         }
 
-        [Fact]
+        [StaFact]
         public void NavigateCommand_Changes_Current_View_To_Recorder()
         {
             var viewModel = CreateViewModel();
+            viewModel.NavigateCommand.Execute(ViewType.BasicSettings);
+
             viewModel.NavigateCommand.Execute(ViewType.Recorder);
 
-            viewModel.NavigateCommand.Execute("Recorder");
-
-            Assert.Equal("Recorder", viewModel.CurrentView.View.Name);
+            Assert.IsType<Recorder>(viewModel.CurrentView);
         }
 
-        [Fact]
+        [StaFact]
         public void NavigateCommand_Closes_Menu()
         {
             var viewModel = CreateViewModel();
@@ -76,7 +76,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.False(viewModel.IsMenuOpen);
         }
 
-        [Fact]
+        [StaFact]
         public void IsNavigationExpanded_Defaults_To_False()
         {
             var viewModel = CreateViewModel();
@@ -84,7 +84,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.False(viewModel.IsNavigationExpanded);
         }
 
-        [Fact]
+        [StaFact]
         public void ToggleNavigationCommand_Expands_Navigation_Submenu()
         {
             var viewModel = CreateViewModel();
@@ -94,7 +94,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.True(viewModel.IsNavigationExpanded);
         }
 
-        [Fact]
+        [StaFact]
         public void ToggleNavigationCommand_Collapses_When_Already_Expanded()
         {
             var viewModel = CreateViewModel();
@@ -105,7 +105,7 @@ namespace Meeting_Recorder.Tests.ViewModels
             Assert.False(viewModel.IsNavigationExpanded);
         }
 
-        [Fact]
+        [StaFact]
         public void NavigateCommand_Raises_PropertyChanged_For_CurrentView()
         {
             var viewModel = CreateViewModel();

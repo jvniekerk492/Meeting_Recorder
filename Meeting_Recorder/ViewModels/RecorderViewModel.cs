@@ -77,32 +77,36 @@ namespace Meeting_Recorder.ViewModels
 
         private void ExecuteStart()
         {
-            var settings = this.applicationSettingsRepository?.GetOrCreate();
-            var outputFolder = settings?.OutputFolder;
-
-            if (string.IsNullOrWhiteSpace(outputFolder))
+            if (string.IsNullOrWhiteSpace(this.OutputFilePath))
             {
-                outputFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var settings = this.applicationSettingsRepository?.GetOrCreate();
+                var outputFolder = settings?.OutputFolder;
+
+                if (string.IsNullOrWhiteSpace(outputFolder))
+                {
+                    outputFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                }
+
+                if (!Directory.Exists(outputFolder))
+                {
+                    Directory.CreateDirectory(outputFolder);
+                }
+
+                var recordingFormat = settings?.RecordingFormat;
+
+                if (string.IsNullOrWhiteSpace(recordingFormat))
+                {
+                    recordingFormat = "wav";
+                }
+
+                if (!recordingFormat.StartsWith('.'))
+                {
+                    recordingFormat = $".{recordingFormat}";
+                }
+
+                this.OutputFilePath = Path.Combine(outputFolder, $"Recording_{DateTime.Now:yyyyMMdd_HHmmss}{recordingFormat}");
             }
 
-            if (!Directory.Exists(outputFolder))
-            {
-                Directory.CreateDirectory(outputFolder);
-            }
-
-            var recordingFormat = settings?.RecordingFormat;
-
-            if (string.IsNullOrWhiteSpace(recordingFormat))
-            {
-                recordingFormat = "wav";
-            }
-
-            if (!recordingFormat.StartsWith('.'))
-            {
-                recordingFormat = $".{recordingFormat}";
-            }
-
-            this.OutputFilePath = Path.Combine(outputFolder, $"Recording_{DateTime.Now:yyyyMMdd_HHmmss}{recordingFormat}");
             this.audioRecorder.StartRecording(this.outputFilePath);
             this.IsRecording = true;
             this.StatusText = "Recording...";
