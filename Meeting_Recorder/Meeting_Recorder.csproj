@@ -7,12 +7,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <None Include=".github\agents\LatestPackageAgent.agent.md" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="xunit.v3.assert" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AudioManager\AudioManager.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\DataRepository\DataRepository.csproj" />
   </ItemGroup>
 </Project>
