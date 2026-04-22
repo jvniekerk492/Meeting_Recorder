@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="AudioManager/AudioManager.csproj" />
+  <Project Path="Data/Data.csproj" />
+  <Project Path="DataRepository/DataRepository.csproj" />
   <Project Path="Meeting_Recorder/Meeting_Recorder.csproj" />
   <Project Path="Meeting_Recorder.Tests/Meeting_Recorder.Tests.csproj" />
 </Solution>

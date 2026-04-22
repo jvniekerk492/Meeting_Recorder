@@ -3,9 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Meeting_Recorder.Views"
         mc:Ignorable="d"
         Title="Meeting Recorder"
         Height="500" Width="600"
         MinHeight="400" MinWidth="500"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource PrimaryBrush}" />
+        Background="{StaticResource PrimaryBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <Border Grid.Row="0"
+                Background="{StaticResource SecondaryBrush}">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="8,0,0,0">
+                <Button Content="☰"
+                        Style="{StaticResource HamburgerButtonStyle}"
+                        Command="{Binding ToggleMenuCommand}" />
+                <TextBlock Text="MEETING RECORDER"
+                           Style="{StaticResource AppTitleStyle}" />
+            </StackPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <ContentControl Grid.Row="1"
+                        x:Name="ContentArea"
+                        Content="{Binding CurrentView}" />
+
+        <!-- Menu Overlay (click to close) -->
+        <Border Grid.Row="1"
+                Background="#80000000"
+                Visibility="{Binding IsMenuOpen, Converter={StaticResource BooleanToVisibilityConverter}}"
+                MouseDown="MenuOverlay_MouseDown" />
+
+        <!-- Slide-out Menu -->
+        <Border Grid.Row="1"
+                HorizontalAlignment="Left"
+                Width="220"
+                Background="{StaticResource SecondaryBrush}"
+                Visibility="{Binding IsMenuOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Margin="0,8,0,0">
+                <Border BorderBrush="{StaticResource PrimaryBrush}"
+                        BorderThickness="0,0,0,1"
+                        Margin="0,0,0,4" />
+
+                <Button Content="Navigation"
+                        Style="{StaticResource MenuExpanderButtonStyle}"
+                        Command="{Binding ToggleNavigationCommand}" />
+
+                <StackPanel Visibility="{Binding IsNavigationExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button Content="Recorder"
+                            Style="{StaticResource SubMenuItemButtonStyle}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static local:ViewType.Recorder}" />
+                    <Button Content="Basic Settings"
+                            Style="{StaticResource SubMenuItemButtonStyle}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static local:ViewType.BasicSettings}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

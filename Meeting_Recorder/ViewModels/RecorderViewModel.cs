@@ -1,13 +1,15 @@
+using System.IO;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.IO;
 using AudioManager;
+using DataRepository;
 
 namespace Meeting_Recorder.ViewModels
 {
     public sealed class RecorderViewModel : ViewModelBase, IDisposable
     {
         private readonly IAudioRecorder audioRecorder;
+        private readonly IApplicationSettingsRepository? applicationSettingsRepository;
         private readonly DispatcherTimer elapsedTimer;
         private string statusText = "Ready";
         private string elapsedTime = "00:00:00";
@@ -16,35 +18,39 @@ namespace Meeting_Recorder.ViewModels
         private bool disposed;
 
         public RecorderViewModel(IAudioRecorder audioRecorder)
+            : this(audioRecorder, null)
+        {
+        }
+
+        public RecorderViewModel(IAudioRecorder audioRecorder, IApplicationSettingsRepository? applicationSettingsRepository)
         {
             this.audioRecorder = audioRecorder ?? throw new ArgumentNullException(nameof(audioRecorder));
-
+            this.applicationSettingsRepository = applicationSettingsRepository;
             this.elapsedTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(500)
             };
-            this.elapsedTimer.Tick += OnElapsedTimerTick;
-
-            StartCommand = new RelayCommand(ExecuteStart, CanExecuteStart);
-            StopCommand = new RelayCommand(ExecuteStop, CanExecuteStop);
+            this.elapsedTimer.Tick += this.OnElapsedTimerTick;
+            this.StartCommand = new RelayCommand(this.ExecuteStart, this.CanExecuteStart);
+            this.StopCommand = new RelayCommand(this.ExecuteStop, this.CanExecuteStop);
         }
 
         public string StatusText
         {
             get => this.statusText;
-            private set => SetProperty(ref this.statusText, value);
+            private set => this.SetProperty(ref this.statusText, value);
         }
 
         public string ElapsedTime
         {
             get => this.elapsedTime;
-            private set => SetProperty(ref this.elapsedTime, value);
+            private set => this.SetProperty(ref this.elapsedTime, value);
         }
 
         public string OutputFilePath
         {
             get => this.outputFilePath;
-            set => SetProperty(ref this.outputFilePath, value);
+            set => this.SetProperty(ref this.outputFilePath, value);
         }
 
         public bool IsRecording
@@ -52,10 +58,10 @@ namespace Meeting_Recorder.ViewModels
             get => this.isRecording;
             private set
             {
-                if (SetProperty(ref this.isRecording, value))
+                if (this.SetProperty(ref this.isRecording, value))
                 {
-                    ((RelayCommand)StartCommand).RaiseCanExecuteChanged();
-                    ((RelayCommand)StopCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)this.StartCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)this.StopCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -71,15 +77,39 @@ namespace Meeting_Recorder.ViewModels
 
         private void ExecuteStart()
         {
-            if (string.IsNullOrWhiteSpace(this.outputFilePath))
+            if (string.IsNullOrWhiteSpace(this.OutputFilePath))
             {
-                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                OutputFilePath = Path.Combine(documentsPath, $"Recording_{DateTime.Now:yyyyMMdd_HHmmss}.wav");
+                var settings = this.applicationSettingsRepository?.GetOrCreate();
+                var outputFolder = settings?.OutputFolder;
+
+                if (string.IsNullOrWhiteSpace(outputFolder))
+                {
+                    outputFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                }
+
+                if (!Directory.Exists(outputFolder))
+                {
+                    Directory.CreateDirectory(outputFolder);
+                }
+
+                var recordingFormat = settings?.RecordingFormat;
+
+                if (string.IsNullOrWhiteSpace(recordingFormat))
+                {
+                    recordingFormat = "wav";
+                }
+
+                if (!recordingFormat.StartsWith('.'))
+                {
+                    recordingFormat = $".{recordingFormat}";
+                }
+
+                this.OutputFilePath = Path.Combine(outputFolder, $"Recording_{DateTime.Now:yyyyMMdd_HHmmss}{recordingFormat}");
             }
 
             this.audioRecorder.StartRecording(this.outputFilePath);
-            IsRecording = true;
-            StatusText = "Recording...";
+            this.IsRecording = true;
+            this.StatusText = "Recording...";
             this.elapsedTimer.Start();
         }
 
@@ -92,13 +122,13 @@ namespace Meeting_Recorder.ViewModels
         {
             this.elapsedTimer.Stop();
             this.audioRecorder.StopRecording();
-            IsRecording = false;
-            StatusText = $"Saved to {this.outputFilePath}";
+            this.IsRecording = false;
+            this.StatusText = $"Saved to {this.outputFilePath}";
         }
 
         private void OnElapsedTimerTick(object? sender, EventArgs e)
         {
-            ElapsedTime = this.audioRecorder.Elapsed.ToString(@"hh\:mm\:ss");
+            this.ElapsedTime = this.audioRecorder.Elapsed.ToString(@"hh\:mm\:ss");
         }
 
         public void Dispose()

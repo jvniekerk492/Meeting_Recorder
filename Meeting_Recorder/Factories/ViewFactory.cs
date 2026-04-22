@@ -1,6 +1,7 @@
 using Meeting_Recorder.Interface;
+using Meeting_Recorder.Views;
 
-namespace Meeting_Recorder.Views
+namespace Meeting_Recorder.Factories
 {
     public sealed class ViewFactory
     {
@@ -11,7 +12,8 @@ namespace Meeting_Recorder.Views
         {
             this.viewMappings = new Dictionary<ViewType, Func<IViewModel, IView>>
             {
-                [ViewType.Recorder] = static viewModel => new Recorder(viewModel)
+                [ViewType.Recorder] = static viewModel => new Recorder(viewModel),
+                [ViewType.BasicSettings] = static viewModel => new BasicSettings(viewModel)
             };
         }
 
