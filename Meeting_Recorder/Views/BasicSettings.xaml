@@ -34,7 +34,7 @@
             <TextBox Grid.Column="1"
                      Text="{Binding OutputFolder, UpdateSourceTrigger=PropertyChanged}"
                      Padding="8"
-                     Background="{StaticResource SecondaryBrush}"
+                     Background="{StaticResource PrimaryBrush}"
                      Foreground="{StaticResource TextBrush}"
                      BorderBrush="{StaticResource AccentBrush}" />
         </Grid>
@@ -54,8 +54,6 @@
                       ItemsSource="{Binding AudioQualityOptions}"
                       SelectedItem="{Binding SelectedAudioQuality}"
                       Padding="8"
-                      Background="{StaticResource SecondaryBrush}"
-                      Foreground="{StaticResource TextBrush}"
                       BorderBrush="{StaticResource AccentBrush}" />
         </Grid>
 
@@ -74,8 +72,6 @@
                       ItemsSource="{Binding RecordingFormatOptions}"
                       SelectedItem="{Binding SelectedRecordingFormat}"
                       Padding="8"
-                      Background="{StaticResource SecondaryBrush}"
-                      Foreground="{StaticResource TextBrush}"
                       BorderBrush="{StaticResource AccentBrush}" />
         </Grid>
 
