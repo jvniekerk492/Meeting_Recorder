@@ -10,22 +10,30 @@ namespace Meeting_Recorder.ViewModels
     {
         private readonly IAudioRecorder audioRecorder;
         private readonly IApplicationSettingsRepository? applicationSettingsRepository;
+        private readonly IRecordingSessionRepository? recordingSessionRepository;
         private readonly DispatcherTimer elapsedTimer;
         private string statusText = "Ready";
         private string elapsedTime = "00:00:00";
         private string outputFilePath = string.Empty;
         private bool isRecording;
         private bool disposed;
+        private DateTime recordingStartedAt;
 
         public RecorderViewModel(IAudioRecorder audioRecorder)
-            : this(audioRecorder, null)
+            : this(audioRecorder, null, null)
         {
         }
 
         public RecorderViewModel(IAudioRecorder audioRecorder, IApplicationSettingsRepository? applicationSettingsRepository)
+            : this(audioRecorder, applicationSettingsRepository, null)
+        {
+        }
+
+        public RecorderViewModel(IAudioRecorder audioRecorder, IApplicationSettingsRepository? applicationSettingsRepository, IRecordingSessionRepository? recordingSessionRepository)
         {
             this.audioRecorder = audioRecorder ?? throw new ArgumentNullException(nameof(audioRecorder));
             this.applicationSettingsRepository = applicationSettingsRepository;
+            this.recordingSessionRepository = recordingSessionRepository;
             this.elapsedTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(500)
@@ -52,6 +60,8 @@ namespace Meeting_Recorder.ViewModels
             get => this.outputFilePath;
             set => this.SetProperty(ref this.outputFilePath, value);
         }
+
+        public DateTime RecordingStartedAt => this.recordingStartedAt;
 
         public bool IsRecording
         {
@@ -107,6 +117,7 @@ namespace Meeting_Recorder.ViewModels
                 this.OutputFilePath = Path.Combine(outputFolder, $"Recording_{DateTime.Now:yyyyMMdd_HHmmss}{recordingFormat}");
             }
 
+            this.recordingStartedAt = DateTime.Now;
             this.audioRecorder.StartRecording(this.outputFilePath);
             this.IsRecording = true;
             this.StatusText = "Recording...";
@@ -124,6 +135,22 @@ namespace Meeting_Recorder.ViewModels
             this.audioRecorder.StopRecording();
             this.IsRecording = false;
             this.StatusText = $"Saved to {this.outputFilePath}";
+            this.SaveRecordingSession();
+        }
+
+        private void SaveRecordingSession()
+        {
+            if (this.recordingSessionRepository == null)
+            {
+                return;
+            }
+
+            this.recordingSessionRepository.Save(new RecordingSession
+            {
+                FilePath = this.outputFilePath,
+                FileName = Path.GetFileName(this.outputFilePath),
+                StartedAt = this.recordingStartedAt
+            });
         }
 
         private void OnElapsedTimerTick(object? sender, EventArgs e)

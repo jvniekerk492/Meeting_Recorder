@@ -4,6 +4,8 @@
 - Use Solid principles
 - Use MVVM design pattern for UI code
 - View-ViewModel Decoupling
+- Keep code files under 600 lines of code
+- Keep the [architecture](../../Architecture.md) DOC updated with any changes to the project structure or design decisions
 
 ## Project code format
 - use explicit this. qualifier for instance members.

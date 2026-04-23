@@ -30,4 +30,7 @@
   <ItemGroup>
     <Compile Remove="Data\**\*.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\SqliteRecordingSessionRepositoryTests.cs" />
+  </ItemGroup>
 </Project>
