@@ -24,6 +24,7 @@
     <ProjectReference Include="..\AudioManager\AudioManager.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DataRepository\DataRepository.csproj" />
+    <ProjectReference Include="..\InferenceService\InferenceService.csproj" />
     <ProjectReference Include="..\Meeting_Recorder\Meeting_Recorder.csproj" />
   </ItemGroup>
   <ItemGroup>

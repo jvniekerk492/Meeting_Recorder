@@ -2,6 +2,7 @@
   <Project Path="AudioManager/AudioManager.csproj" />
   <Project Path="Data/Data.csproj" />
   <Project Path="DataRepository/DataRepository.csproj" />
-  <Project Path="Meeting_Recorder/Meeting_Recorder.csproj" />
+  <Project Path="InferenceService/InferenceService.csproj" />
   <Project Path="Meeting_Recorder.Tests/Meeting_Recorder.Tests.csproj" />
+  <Project Path="Meeting_Recorder/Meeting_Recorder.csproj" />
 </Solution>
