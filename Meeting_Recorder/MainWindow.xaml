@@ -61,6 +61,10 @@
                             Style="{StaticResource SubMenuItemButtonStyle}"
                             Command="{Binding NavigateCommand}"
                             CommandParameter="{x:Static local:ViewType.Recorder}" />
+                    <Button Content="Transcribe Meeting"
+                            Style="{StaticResource SubMenuItemButtonStyle}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static local:ViewType.TranscribeMeeting}" />
                     <Button Content="Basic Settings"
                             Style="{StaticResource SubMenuItemButtonStyle}"
                             Command="{Binding NavigateCommand}"

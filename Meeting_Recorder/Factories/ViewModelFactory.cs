@@ -13,6 +13,8 @@ namespace Meeting_Recorder.Factories
             {
                 case ViewType.Recorder:
                     return new RecorderViewModel(new AudioManager.AudioRecorder(),applicationSettingsRepository);
+                case ViewType.TranscribeMeeting:
+                    return new TranscribeMeetingViewModel(applicationSettingsRepository);
                 case ViewType.BasicSettings:
                     return new BasicSettingsViewModel(applicationSettingsRepository);
                 default:

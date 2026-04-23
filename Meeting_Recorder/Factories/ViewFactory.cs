@@ -13,6 +13,7 @@ namespace Meeting_Recorder.Factories
             this.viewMappings = new Dictionary<ViewType, Func<IViewModel, IView>>
             {
                 [ViewType.Recorder] = static viewModel => new Recorder(viewModel),
+                [ViewType.TranscribeMeeting] = static viewModel => new TranscribeMeeting(viewModel),
                 [ViewType.BasicSettings] = static viewModel => new BasicSettings(viewModel)
             };
         }

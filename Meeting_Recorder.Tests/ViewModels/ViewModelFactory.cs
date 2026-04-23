@@ -16,6 +16,8 @@ namespace Meeting_Recorder.Tests.ViewModels
             {
                 case ViewType.Recorder:
                     return new MainWindowViewModel(applicationSettingsRepository);
+                case ViewType.TranscribeMeeting:
+                    return new TranscribeMeetingViewModel(applicationSettingsRepository);
                 case ViewType.BasicSettings:
                     return new BasicSettingsViewModel(applicationSettingsRepository);
                 default:

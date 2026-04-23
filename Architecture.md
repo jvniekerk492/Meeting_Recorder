@@ -23,10 +23,21 @@ Meeting_Recorder/
 ├── Resources/
 │   └── Styles.xaml
 ├── ViewModels/
+│   ├── BasicSettingsViewModel.cs
 │   ├── ITimer.cs
+│   ├── MainWindowViewModel.cs
 │   ├── RecorderViewModel.cs
 │   ├── RelayCommand.cs
+│   ├── TranscribeMeetingViewModel.cs
 │   └── ViewModelBase.cs
+├── Views/
+│   ├── BasicSettings.xaml
+│   ├── BasicSettings.xaml.cs
+│   ├── Recorder.xaml
+│   ├── Recorder.xaml.cs
+│   ├── TranscribeMeeting.xaml
+│   ├── TranscribeMeeting.xaml.cs
+│   └── ViewType.cs
 ├── .github/
 │   └── agents/
 │       └── LatestPackageAgent.agent.md
